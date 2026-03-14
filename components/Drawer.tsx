@@ -32,7 +32,7 @@ export default function DrawerContent(props: DrawerContentComponentProps) {
         </Text>
       </View>
 
-      <DrawerContentScrollView {...props} contentContainerStyle={{ paddingTop: 0 }}>
+      <DrawerContentScrollView {...props} contentContainerStyle={{ paddingTop: 16 }}>
         <DrawerItemList {...props} />
       </DrawerContentScrollView>
 
