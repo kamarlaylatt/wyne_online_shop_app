@@ -18,7 +18,7 @@ export default function DrawerLayout() {
     >
       <Drawer.Screen
         name="(tabs)"
-        options={{ headerShown: false, title: 'Dashboard', drawerIcon: ({ color }) => null }}
+        options={{ headerShown: false, title: 'Home', drawerIcon: ({ color }) => null }}
       />
       <Drawer.Screen
         name="suppliers"
