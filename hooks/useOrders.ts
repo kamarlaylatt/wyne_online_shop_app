@@ -56,3 +56,14 @@ export function useUpdateOrder(id: string) {
     },
   });
 }
+
+export function useDeleteOrder(id: string) {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: () => api.deleteOrder(id),
+    onSuccess: () => {
+      qc.removeQueries({ queryKey: ['orders', id] });
+      qc.invalidateQueries({ queryKey: ['orders'] });
+    },
+  });
+}

@@ -62,6 +62,8 @@ export const api = {
     http.post('/orders', body).then((r) => r.data),
   updateOrder: (id: string, body: UpdateOrderBody): Promise<Order> =>
     http.put(`/orders/${id}`, body).then((r) => r.data),
+  deleteOrder: (id: string): Promise<Order> =>
+    http.delete(`/orders/${id}`).then((r) => r.data),
 
   // Order Items
   getOrderItems: (orderId: string): Promise<OrderItem[]> =>

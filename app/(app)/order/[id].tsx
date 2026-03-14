@@ -4,9 +4,11 @@ import {
   ActivityIndicator,
   Button,
   Chip,
+  Dialog,
   Divider,
   IconButton,
   List,
+  Portal,
   SegmentedButtons,
   Snackbar,
   Surface,
@@ -15,9 +17,9 @@ import {
   TouchableRipple,
   useTheme,
 } from 'react-native-paper';
-import { useLocalSearchParams } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useOrder, useOrderItems, useOrderPreload, useUpdateOrder } from '@/hooks/useOrders';
+import { useOrder, useOrderItems, useOrderPreload, useUpdateOrder, useDeleteOrder } from '@/hooks/useOrders';
 import type { Customer, OrderStatus, PaymentStatus, PurchaseItem } from '@/types/models';
 
 const formatIDR = (value: number | string) =>
@@ -43,10 +45,12 @@ type ItemRow = {
 
 export default function OrderDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
+  const router = useRouter();
   const theme = useTheme();
   const { data: order, isPending, isError } = useOrder(id);
   const { data: fetchedItems } = useOrderItems(id);
   const { mutate: updateOrder, isPending: saving } = useUpdateOrder(id);
+  const { mutate: deleteOrder, isPending: deleting } = useDeleteOrder(id);
 
   const [editing, setEditing] = useState(false);
   const { data: preload } = useOrderPreload({ enabled: editing });
@@ -58,6 +62,7 @@ export default function OrderDetailScreen() {
   const [items, setItems] = useState<ItemRow[]>([]);
   const [itemPickerIndex, setItemPickerIndex] = useState<number | null>(null);
   const [snackMessage, setSnackMessage] = useState('');
+  const [deleteDialogVisible, setDeleteDialogVisible] = useState(false);
 
   // Sync form state whenever order or items data loads
   useEffect(() => {
@@ -147,6 +152,19 @@ export default function OrderDetailScreen() {
     );
   };
 
+  const handleDelete = () => {
+    deleteOrder(undefined, {
+      onSuccess: () => {
+        setDeleteDialogVisible(false);
+        router.back();
+      },
+      onError: (err: any) => {
+        setDeleteDialogVisible(false);
+        setSnackMessage(err?.response?.data?.message ?? 'Failed to delete order.');
+      },
+    });
+  };
+
   if (isPending) {
     return (
       <SafeAreaView style={[styles.root, { backgroundColor: theme.colors.background }]}>
@@ -199,7 +217,10 @@ export default function OrderDetailScreen() {
             </Text>
           </View>
           {!editing ? (
-            <IconButton icon="pencil" mode="contained-tonal" onPress={() => setEditing(true)} />
+            <View style={styles.headerButtons}>
+              <IconButton icon="pencil" mode="contained-tonal" onPress={() => setEditing(true)} />
+              <IconButton icon="delete" mode="contained-tonal" onPress={() => setDeleteDialogVisible(true)} />
+            </View>
           ) : (
             <IconButton icon="close" mode="contained-tonal" onPress={cancelEdit} />
           )}
@@ -469,6 +490,28 @@ export default function OrderDetailScreen() {
       >
         {snackMessage}
       </Snackbar>
+
+      <Portal>
+        <Dialog visible={deleteDialogVisible} onDismiss={() => setDeleteDialogVisible(false)}>
+          <Dialog.Title>Delete Order?</Dialog.Title>
+          <Dialog.Content>
+            <Text variant="bodyMedium">
+              Are you sure you want to delete this order? This action cannot be undone.
+            </Text>
+          </Dialog.Content>
+          <Dialog.Actions>
+            <Button onPress={() => setDeleteDialogVisible(false)}>Cancel</Button>
+            <Button
+              onPress={handleDelete}
+              loading={deleting}
+              disabled={deleting}
+              textColor={theme.colors.error}
+            >
+              Delete
+            </Button>
+          </Dialog.Actions>
+        </Dialog>
+      </Portal>
     </SafeAreaView>
   );
 }
@@ -478,6 +521,7 @@ const styles = StyleSheet.create({
   center: { flex: 1, justifyContent: 'center', alignItems: 'center' },
   content: { padding: 16, paddingBottom: 40 },
   headerRow: { flexDirection: 'row', alignItems: 'flex-start', marginBottom: 4 },
+  headerButtons: { flexDirection: 'row', gap: 4 },
   flex1: { flex: 1 },
   flex2: { flex: 2 },
   section: { marginTop: 16, gap: 4 },
