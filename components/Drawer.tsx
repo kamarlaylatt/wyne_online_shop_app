@@ -11,8 +11,15 @@ export default function DrawerContent(props: DrawerContentComponentProps) {
   const { data: session } = authClient.useSession();
 
   const handleLogout = async () => {
-    await authClient.signOut();
-    router.replace('/(auth)/login');
+    try {
+      console.log('[Logout] Starting logout process...');
+      await authClient.signOut();
+      console.log('[Logout] Sign out successful');
+      router.replace('/(auth)/login');
+      console.log('[Logout] Redirected to login');
+    } catch (error) {
+      console.error('[Logout] Error during logout:', error);
+    }
   };
 
   return (
@@ -65,6 +72,6 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   logoutItem: {
-    marginBottom: 8,
+    marginBottom: 32,
   },
 });
