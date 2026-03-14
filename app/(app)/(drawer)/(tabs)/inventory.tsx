@@ -11,7 +11,8 @@ const formatDate = (str: string) => new Date(str).toLocaleDateString('id-ID');
 export default function InventoryScreen() {
   const theme = useTheme();
   const router = useRouter();
-  const { data: items, isPending, isError } = usePurchaseItems();
+  const { data, isPending, isError, fetchNextPage, hasNextPage, isFetchingNextPage } = usePurchaseItems();
+  const items = data?.pages.flatMap((p) => p.data) ?? [];
 
   if (isPending) {
     return (
@@ -23,7 +24,7 @@ export default function InventoryScreen() {
     );
   }
 
-  if (isError || !items?.length) {
+  if (isError || (!isPending && !items.length)) {
     return (
       <SafeAreaView style={[styles.root, { backgroundColor: theme.colors.background }]}>
         <View style={styles.center}>
@@ -54,6 +55,9 @@ export default function InventoryScreen() {
         renderItem={renderItem}
         ItemSeparatorComponent={() => <View style={[styles.separator, { backgroundColor: theme.colors.outlineVariant }]} />}
         contentContainerStyle={styles.list}
+        onEndReached={() => { if (hasNextPage) fetchNextPage(); }}
+        onEndReachedThreshold={0.3}
+        ListFooterComponent={isFetchingNextPage ? <ActivityIndicator style={styles.footer} color={theme.colors.primary} /> : null}
       />
     </SafeAreaView>
   );
@@ -64,4 +68,5 @@ const styles = StyleSheet.create({
   center: { flex: 1, justifyContent: 'center', alignItems: 'center' },
   list: { paddingBottom: 16 },
   separator: { height: StyleSheet.hairlineWidth },
+  footer: { paddingVertical: 16 },
 });

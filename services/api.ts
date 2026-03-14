@@ -1,5 +1,5 @@
 import http from '@/services/http';
-import type { Supplier, Customer, PurchaseItem, Order, OrderItem, OrderStatus, PaymentStatus } from '@/types/models';
+import type { Supplier, Customer, PurchaseItem, Order, OrderItem, OrderStatus, PaymentStatus, PaginatedResponse } from '@/types/models';
 
 export type OrderItemInput = { purchaseItemId: string; quantity: number; unitPrice: number };
 
@@ -28,14 +28,14 @@ export const api = {
     http.get(`/customers/${id}`).then((r) => r.data),
 
   // Purchase Items
-  getPurchaseItems: (): Promise<PurchaseItem[]> =>
-    http.get('/purchase-items').then((r) => r.data),
+  getPurchaseItems: (page = 1, limit = 20): Promise<PaginatedResponse<PurchaseItem>> =>
+    http.get('/purchase-items', { params: { page, limit } }).then((r) => r.data),
   getPurchaseItem: (id: string): Promise<PurchaseItem> =>
     http.get(`/purchase-items/${id}`).then((r) => r.data),
 
   // Orders
-  getOrders: (): Promise<Order[]> =>
-    http.get('/orders').then((r) => r.data),
+  getOrders: (page = 1, limit = 20): Promise<PaginatedResponse<Order>> =>
+    http.get('/orders', { params: { page, limit } }).then((r) => r.data),
   getOrder: (id: string): Promise<Order> =>
     http.get(`/orders/${id}`).then((r) => r.data),
   getOrderPreload: (): Promise<{ purchaseItems: PurchaseItem[]; customers: Customer[] }> =>

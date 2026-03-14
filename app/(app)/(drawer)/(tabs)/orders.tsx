@@ -19,7 +19,8 @@ const statusMode = (status: OrderStatus): 'outlined' | 'flat' => {
 export default function OrdersScreen() {
   const theme = useTheme();
   const router = useRouter();
-  const { data: orders, isPending, isError } = useOrders();
+  const { data, isPending, isError, fetchNextPage, hasNextPage, isFetchingNextPage } = useOrders();
+  const orders = data?.pages.flatMap((p) => p.data) ?? [];
 
   if (isPending) {
     return (
@@ -32,7 +33,7 @@ export default function OrdersScreen() {
     );
   }
 
-  if (isError || !orders?.length) {
+  if (isError || (!isPending && !orders.length)) {
     return (
       <SafeAreaView style={[styles.root, { backgroundColor: theme.colors.background }]}>
         <View style={styles.center}>
@@ -74,6 +75,9 @@ export default function OrdersScreen() {
         renderItem={renderItem}
         ItemSeparatorComponent={() => <View style={[styles.separator, { backgroundColor: theme.colors.outlineVariant }]} />}
         contentContainerStyle={styles.list}
+        onEndReached={() => { if (hasNextPage) fetchNextPage(); }}
+        onEndReachedThreshold={0.3}
+        ListFooterComponent={isFetchingNextPage ? <ActivityIndicator style={styles.footer} color={theme.colors.primary} /> : null}
       />
       <FAB icon="plus" style={styles.fab} onPress={() => router.push('/(app)/order/create')} />
     </SafeAreaView>
@@ -88,4 +92,5 @@ const styles = StyleSheet.create({
   chip: { alignSelf: 'center' },
   separator: { height: StyleSheet.hairlineWidth },
   fab: { position: 'absolute', right: 16, bottom: 16 },
+  footer: { paddingVertical: 16 },
 });

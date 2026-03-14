@@ -8,15 +8,18 @@ import { useCustomers } from '@/hooks/useCustomers';
 
 export default function DashboardScreen() {
   const theme = useTheme();
-  const { data: orders, isPending: ordersLoading } = useOrders();
-  const { data: purchaseItems, isPending: itemsLoading } = usePurchaseItems();
+  const { data: ordersData, isPending: ordersLoading } = useOrders();
+  const { data: purchaseItemsData, isPending: itemsLoading } = usePurchaseItems();
   const { data: customers, isPending: customersLoading } = useCustomers();
 
   const isLoading = ordersLoading || itemsLoading || customersLoading;
 
-  const totalOrders = orders?.length ?? 0;
-  const paidOrders = orders?.filter((o) => o.paymentStatus === 'PAID').length ?? 0;
-  const inventoryItems = purchaseItems?.length ?? 0;
+  const orders = ordersData?.pages.flatMap((p) => p.data) ?? [];
+  const purchaseItems = purchaseItemsData?.pages.flatMap((p) => p.data) ?? [];
+
+  const totalOrders = orders.length;
+  const paidOrders = orders.filter((o) => o.paymentStatus === 'PAID').length;
+  const inventoryItems = purchaseItems.length;
   const totalCustomers = customers?.length ?? 0;
 
   const stats = [

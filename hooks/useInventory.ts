@@ -1,8 +1,14 @@
-import { useQuery } from '@tanstack/react-query';
+import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import { api } from '@/services/api';
 
 export function usePurchaseItems() {
-  return useQuery({ queryKey: ['purchase-items'], queryFn: api.getPurchaseItems });
+  return useInfiniteQuery({
+    queryKey: ['purchase-items'],
+    queryFn: ({ pageParam }) => api.getPurchaseItems(pageParam),
+    initialPageParam: 1,
+    getNextPageParam: (lastPage) =>
+      lastPage.page < lastPage.totalPages ? lastPage.page + 1 : undefined,
+  });
 }
 
 export function usePurchaseItem(id: string) {
