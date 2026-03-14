@@ -29,6 +29,7 @@ export interface PurchaseItem {
   quantity: number;
   supplierId: string;
   purchaseDate: string;
+  sellPerPrice?: number;
   createdAt: string;
   updatedAt: string;
   supplier?: Supplier;

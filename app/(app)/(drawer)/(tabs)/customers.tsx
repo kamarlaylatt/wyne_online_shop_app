@@ -1,12 +1,14 @@
 import React from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
-import { ActivityIndicator, List, Text, useTheme } from 'react-native-paper';
+import { ActivityIndicator, FAB, List, Text, useTheme } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useRouter } from 'expo-router';
 import { useCustomers } from '@/hooks/useCustomers';
 import type { Customer } from '@/types/models';
 
 export default function CustomersScreen() {
   const theme = useTheme();
+  const router = useRouter();
   const { data: customers, isPending, isError } = useCustomers();
 
   if (isPending) {
@@ -15,6 +17,7 @@ export default function CustomersScreen() {
         <View style={styles.center}>
           <ActivityIndicator size="large" color={theme.colors.primary} />
         </View>
+        <FAB icon="plus" style={styles.fab} onPress={() => router.push('/(app)/customer/create')} />
       </SafeAreaView>
     );
   }
@@ -28,6 +31,7 @@ export default function CustomersScreen() {
             No customers
           </Text>
         </View>
+        <FAB icon="plus" style={styles.fab} onPress={() => router.push('/(app)/customer/create')} />
       </SafeAreaView>
     );
   }
@@ -36,6 +40,7 @@ export default function CustomersScreen() {
     <List.Item
       title={item.name}
       description={`${item.phone ?? '—'} • ${item.address ?? '—'}`}
+      onPress={() => router.push(`/(app)/customer/${item.id}`)}
       left={(props) => <List.Icon {...props} icon="account" />}
       style={{ backgroundColor: theme.colors.surface }}
     />
@@ -50,6 +55,7 @@ export default function CustomersScreen() {
         ItemSeparatorComponent={() => <View style={[styles.separator, { backgroundColor: theme.colors.outlineVariant }]} />}
         contentContainerStyle={styles.list}
       />
+      <FAB icon="plus" style={styles.fab} onPress={() => router.push('/(app)/customer/create')} />
     </SafeAreaView>
   );
 }
@@ -57,6 +63,7 @@ export default function CustomersScreen() {
 const styles = StyleSheet.create({
   root: { flex: 1 },
   center: { flex: 1, justifyContent: 'center', alignItems: 'center' },
-  list: { paddingBottom: 16 },
+  list: { paddingBottom: 88 },
   separator: { height: StyleSheet.hairlineWidth },
+  fab: { position: 'absolute', right: 16, bottom: 16 },
 });

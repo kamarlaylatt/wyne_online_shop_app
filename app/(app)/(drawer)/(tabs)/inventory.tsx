@@ -1,6 +1,6 @@
 import React from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
-import { ActivityIndicator, List, Text, useTheme } from 'react-native-paper';
+import { ActivityIndicator, FAB, List, Text, useTheme } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { usePurchaseItems } from '@/hooks/useInventory';
@@ -20,6 +20,7 @@ export default function InventoryScreen() {
         <View style={styles.center}>
           <ActivityIndicator size="large" color={theme.colors.primary} />
         </View>
+        <FAB icon="plus" style={styles.fab} onPress={() => router.push('/(app)/purchase-item/create')} />
       </SafeAreaView>
     );
   }
@@ -33,6 +34,7 @@ export default function InventoryScreen() {
             No items
           </Text>
         </View>
+        <FAB icon="plus" style={styles.fab} onPress={() => router.push('/(app)/purchase-item/create')} />
       </SafeAreaView>
     );
   }
@@ -59,6 +61,7 @@ export default function InventoryScreen() {
         onEndReachedThreshold={0.3}
         ListFooterComponent={isFetchingNextPage ? <ActivityIndicator style={styles.footer} color={theme.colors.primary} /> : null}
       />
+      <FAB icon="plus" style={styles.fab} onPress={() => router.push('/(app)/purchase-item/create')} />
     </SafeAreaView>
   );
 }
@@ -66,7 +69,8 @@ export default function InventoryScreen() {
 const styles = StyleSheet.create({
   root: { flex: 1 },
   center: { flex: 1, justifyContent: 'center', alignItems: 'center' },
-  list: { paddingBottom: 16 },
+  list: { paddingBottom: 88 },
   separator: { height: StyleSheet.hairlineWidth },
   footer: { paddingVertical: 16 },
+  fab: { position: 'absolute', right: 16, bottom: 16 },
 });

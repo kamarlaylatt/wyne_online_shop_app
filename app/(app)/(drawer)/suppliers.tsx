@@ -1,12 +1,14 @@
 import React from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
-import { ActivityIndicator, Badge, List, Text, useTheme } from 'react-native-paper';
+import { ActivityIndicator, Badge, FAB, List, Text, useTheme } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useRouter } from 'expo-router';
 import { useSuppliers } from '@/hooks/useSuppliers';
 import type { Supplier } from '@/types/models';
 
 export default function SuppliersScreen() {
   const theme = useTheme();
+  const router = useRouter();
   const { data: suppliers, isPending, isError } = useSuppliers();
 
   if (isPending) {
@@ -15,6 +17,7 @@ export default function SuppliersScreen() {
         <View style={styles.center}>
           <ActivityIndicator size="large" color={theme.colors.primary} />
         </View>
+        <FAB icon="plus" style={styles.fab} onPress={() => router.push('/(app)/supplier/create')} />
       </SafeAreaView>
     );
   }
@@ -28,6 +31,7 @@ export default function SuppliersScreen() {
             No suppliers
           </Text>
         </View>
+        <FAB icon="plus" style={styles.fab} onPress={() => router.push('/(app)/supplier/create')} />
       </SafeAreaView>
     );
   }
@@ -36,6 +40,7 @@ export default function SuppliersScreen() {
     <List.Item
       title={item.name}
       description={`${item.phone ?? item.email ?? '—'}`}
+      onPress={() => router.push(`/(app)/supplier/${item.id}`)}
       left={(props) => <List.Icon {...props} icon="factory" />}
       right={() =>
         item._count != null ? (
@@ -58,6 +63,7 @@ export default function SuppliersScreen() {
         ItemSeparatorComponent={() => <View style={[styles.separator, { backgroundColor: theme.colors.outlineVariant }]} />}
         contentContainerStyle={styles.list}
       />
+      <FAB icon="plus" style={styles.fab} onPress={() => router.push('/(app)/supplier/create')} />
     </SafeAreaView>
   );
 }
@@ -65,7 +71,8 @@ export default function SuppliersScreen() {
 const styles = StyleSheet.create({
   root: { flex: 1 },
   center: { flex: 1, justifyContent: 'center', alignItems: 'center' },
-  list: { paddingBottom: 16 },
+  list: { paddingBottom: 88 },
   separator: { height: StyleSheet.hairlineWidth },
   badgeContainer: { justifyContent: 'center', alignItems: 'center', paddingRight: 8, gap: 2 },
+  fab: { position: 'absolute', right: 25, bottom: 70 },
 });

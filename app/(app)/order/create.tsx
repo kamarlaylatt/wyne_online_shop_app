@@ -82,7 +82,7 @@ export default function CreateOrderScreen() {
   };
 
   const selectPurchaseItem = (rowId: string, pi: PurchaseItem) => {
-    const unitPrice = Math.round(parseFloat(String(pi.totalPrice)) / pi.quantity);
+    const unitPrice = pi.sellPerPrice ?? Math.round(parseFloat(String(pi.totalPrice)) / pi.quantity);
     updateItem(rowId, {
       purchaseItemId: pi.id,
       purchaseItemName: pi.name,
@@ -333,24 +333,27 @@ export default function CreateOrderScreen() {
           <Surface style={[styles.modalSheet, { backgroundColor: theme.colors.surface }]} elevation={4}>
             <Text variant="titleMedium" style={[styles.modalTitle, { color: theme.colors.onSurface }]}>Select Purchase Item</Text>
             <ScrollView>
-              {purchaseItems.map((pi) => (
-                <TouchableRipple
-                  key={pi.id}
-                  onPress={() => {
-                    if (itemPickerIndex !== null) {
-                      selectPurchaseItem(items[itemPickerIndex].id, pi);
-                    }
-                  }}
-                  style={styles.modalItem}
-                >
-                  <View>
-                    <Text variant="bodyLarge" style={{ color: theme.colors.onSurface }}>{pi.name}</Text>
-                    <Text variant="bodySmall" style={{ color: theme.colors.onSurfaceVariant }}>
-                      Stock: {pi.quantity} • {formatIDR(Math.round(parseFloat(String(pi.totalPrice)) / pi.quantity))} /unit
-                    </Text>
-                  </View>
-                </TouchableRipple>
-              ))}
+              {purchaseItems.map((pi) => {
+                const displayPrice = pi.sellPerPrice ?? Math.round(parseFloat(String(pi.totalPrice)) / pi.quantity);
+                return (
+                  <TouchableRipple
+                    key={pi.id}
+                    onPress={() => {
+                      if (itemPickerIndex !== null) {
+                        selectPurchaseItem(items[itemPickerIndex].id, pi);
+                      }
+                    }}
+                    style={styles.modalItem}
+                  >
+                    <View>
+                      <Text variant="bodyLarge" style={{ color: theme.colors.onSurface }}>{pi.name}</Text>
+                      <Text variant="bodySmall" style={{ color: theme.colors.onSurfaceVariant }}>
+                        Stock: {pi.quantity} • {formatIDR(displayPrice)} /unit
+                      </Text>
+                    </View>
+                  </TouchableRipple>
+                );
+              })}
               {purchaseItems.length === 0 && (
                 <Text style={{ padding: 16, color: theme.colors.onSurfaceVariant }}>No purchase items available</Text>
               )}

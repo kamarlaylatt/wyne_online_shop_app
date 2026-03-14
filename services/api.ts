@@ -20,18 +20,36 @@ export const api = {
     http.get('/suppliers').then((r) => r.data),
   getSupplier: (id: string): Promise<Supplier> =>
     http.get(`/suppliers/${id}`).then((r) => r.data),
+  createSupplier: (body: { name: string; phone?: string; email?: string }): Promise<Supplier> =>
+    http.post('/suppliers', body).then((r) => r.data),
+  updateSupplier: (id: string, body: { name?: string; phone?: string; email?: string | null }): Promise<Supplier> =>
+    http.put(`/suppliers/${id}`, body).then((r) => r.data),
+  deleteSupplier: (id: string): Promise<Supplier> =>
+    http.delete(`/suppliers/${id}`).then((r) => r.data),
 
   // Customers
   getCustomers: (): Promise<Customer[]> =>
     http.get('/customers').then((r) => r.data),
   getCustomer: (id: string): Promise<Customer> =>
     http.get(`/customers/${id}`).then((r) => r.data),
+  createCustomer: (body: { name: string; phone?: string; address?: string }): Promise<Customer> =>
+    http.post('/customers', body).then((r) => r.data),
+  updateCustomer: (id: string, body: { name?: string; phone?: string; address?: string | null }): Promise<Customer> =>
+    http.put(`/customers/${id}`, body).then((r) => r.data),
+  deleteCustomer: (id: string): Promise<Customer> =>
+    http.delete(`/customers/${id}`).then((r) => r.data),
 
   // Purchase Items
   getPurchaseItems: (page = 1, limit = 20): Promise<PaginatedResponse<PurchaseItem>> =>
     http.get('/purchase-items', { params: { page, limit } }).then((r) => r.data),
   getPurchaseItem: (id: string): Promise<PurchaseItem> =>
     http.get(`/purchase-items/${id}`).then((r) => r.data),
+  createPurchaseItem: (body: { name: string; totalPrice: number; quantity: number; supplierId: string; purchaseDate: string; sellPerPrice?: number }): Promise<PurchaseItem> =>
+    http.post('/purchase-items', body).then((r) => r.data),
+  updatePurchaseItem: (id: string, body: { name?: string; totalPrice?: number; quantity?: number; supplierId?: string; purchaseDate?: string; sellPerPrice?: number | null }): Promise<PurchaseItem> =>
+    http.put(`/purchase-items/${id}`, body).then((r) => r.data),
+  deletePurchaseItem: (id: string): Promise<PurchaseItem> =>
+    http.delete(`/purchase-items/${id}`).then((r) => r.data),
 
   // Orders
   getOrders: (page = 1, limit = 20): Promise<PaginatedResponse<Order>> =>
