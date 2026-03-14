@@ -1,13 +1,15 @@
 import React from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
-import { ActivityIndicator, Card, Text, useTheme } from 'react-native-paper';
+import { ActivityIndicator, Button, Card, Text, useTheme } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useRouter } from 'expo-router';
 import { useOrders } from '@/hooks/useOrders';
 import { usePurchaseItems } from '@/hooks/useInventory';
 import { useCustomers } from '@/hooks/useCustomers';
 
 export default function DashboardScreen() {
   const theme = useTheme();
+  const router = useRouter();
   const { data: ordersData, isPending: ordersLoading } = useOrders();
   const { data: purchaseItemsData, isPending: itemsLoading } = usePurchaseItems();
   const { data: customers, isPending: customersLoading } = useCustomers();
@@ -31,7 +33,7 @@ export default function DashboardScreen() {
 
   return (
     <SafeAreaView style={[styles.root, { backgroundColor: theme.colors.background }]}>
-      <ScrollView contentContainerStyle={styles.content}>
+      <ScrollView contentContainerStyle={styles.content} style={styles.scrollView}>
         <Text variant="headlineSmall" style={[styles.heading, { color: theme.colors.onBackground }]}>
           Dashboard
         </Text>
@@ -55,14 +57,27 @@ export default function DashboardScreen() {
           ))}
         </View>
       </ScrollView>
+      <View style={styles.buttonContainer}>
+        <Button
+          mode="contained"
+          icon="plus"
+          onPress={() => router.push('/(app)/order/create')}
+          style={styles.createBtn}
+        >
+          Create Order
+        </Button>
+      </View>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  root: { flex: 1 },
+  root: { flex: 1, flexDirection: 'column' },
+  scrollView: { flex: 1 },
   content: { padding: 16 },
   heading: { fontWeight: '700', marginBottom: 16 },
+  buttonContainer: { padding: 16, paddingBottom: 8 },
+  createBtn: {},
   grid: { flexDirection: 'row', flexWrap: 'wrap', gap: 12 },
   card: { width: '47%' },
   cardContent: { alignItems: 'center', padding: 16, gap: 4 },

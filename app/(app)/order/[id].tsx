@@ -6,6 +6,7 @@ import {
   Chip,
   Dialog,
   Divider,
+  FAB,
   IconButton,
   List,
   Portal,
@@ -519,6 +520,8 @@ export default function OrderDetailScreen() {
         {snackMessage}
       </Snackbar>
 
+      <FAB icon="plus" style={styles.fab} onPress={() => router.push('/(app)/order/create')} />
+
       <Portal>
         <Dialog visible={deleteDialogVisible} onDismiss={() => setDeleteDialogVisible(false)}>
           <Dialog.Title>Delete Order?</Dialog.Title>
@@ -568,6 +571,8 @@ const styles = StyleSheet.create({
   totalRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 12, borderRadius: 8 },
   saveBtn: { marginTop: 24 },
   saveBtnContent: { paddingVertical: 6 },
+  // FAB
+  fab: { position: 'absolute', right: 25, bottom: 70 },
   // Modal
   modalOverlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.45)', justifyContent: 'center', padding: 24 },
   modalSheet: { borderRadius: 12, maxHeight: '70%', overflow: 'hidden' },
