@@ -157,6 +157,18 @@ export default function OrderDetailScreen() {
     );
   }
 
+  if (isError) {
+    return (
+      <SafeAreaView style={[styles.root, { backgroundColor: theme.colors.background }]}>
+        <View style={styles.center}>
+          <Text variant="titleMedium" style={{ color: theme.colors.error }}>
+            Failed to load order
+          </Text>
+        </View>
+      </SafeAreaView>
+    );
+  }
+
   if (!order) {
     return (
       <SafeAreaView style={[styles.root, { backgroundColor: theme.colors.background }]}>

@@ -40,7 +40,11 @@ export function useUpdateOrder(id: string) {
     mutationFn: (body: import('@/services/api').UpdateOrderBody) => api.updateOrder(id, body),
     onSuccess: (updated) => {
       qc.setQueryData(['orders', id], updated);
+      if (updated.orderItems) {
+        qc.setQueryData(['order-items', id], updated.orderItems);
+      }
       qc.invalidateQueries({ queryKey: ['orders'] });
+      qc.invalidateQueries({ queryKey: ['order-items', id] });
     },
   });
 }
