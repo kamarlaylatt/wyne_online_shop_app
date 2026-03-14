@@ -303,6 +303,10 @@ export default function OrderDetailScreen() {
           <>
             {items.map((row, idx) => {
               const subtotal = (parseFloat(row.quantity) || 0) * (parseFloat(row.unitPrice) || 0);
+              const selectedItem = purchaseItems.find(pi => pi.id === row.purchaseItemId);
+              const orderCount = selectedItem?._count?.orderItems ?? 0;
+              const isLowStock = selectedItem && orderCount >= selectedItem.quantity;
+
               return (
                 <Surface key={row.id} style={[styles.itemCard, { backgroundColor: theme.colors.surfaceVariant }]} elevation={0}>
                   <View style={styles.itemHeader}>
@@ -311,6 +315,15 @@ export default function OrderDetailScreen() {
                       <IconButton icon="close" size={18} onPress={() => removeItem(row.id)} />
                     )}
                   </View>
+
+                  {isLowStock && (
+                    <View style={[styles.warningBox, { backgroundColor: theme.colors.errorContainer }]}>
+                      <Text variant="labelSmall" style={{ color: theme.colors.onErrorContainer }}>
+                        ⚠️ Stock critically low - {orderCount} orders vs {selectedItem.quantity} units
+                      </Text>
+                    </View>
+                  )}
+
                   <TouchableRipple
                     onPress={() => setItemPickerIndex(idx)}
                     style={[styles.picker, { borderColor: theme.colors.outline }]}
@@ -457,22 +470,37 @@ export default function OrderDetailScreen() {
               Select Purchase Item
             </Text>
             <ScrollView>
-              {purchaseItems.map((pi) => (
-                <TouchableRipple
-                  key={pi.id}
-                  onPress={() => {
-                    if (itemPickerIndex !== null) selectPurchaseItem(items[itemPickerIndex].id, pi);
-                  }}
-                  style={styles.modalItem}
-                >
-                  <View>
-                    <Text variant="bodyLarge" style={{ color: theme.colors.onSurface }}>{pi.name}</Text>
-                    <Text variant="bodySmall" style={{ color: theme.colors.onSurfaceVariant }}>
-                      Stock: {pi.quantity} • {formatIDR(Math.round(parseFloat(String(pi.totalPrice)) / pi.quantity))} /unit
-                    </Text>
-                  </View>
-                </TouchableRipple>
-              ))}
+              {purchaseItems.map((pi) => {
+                const orderCount = pi._count?.orderItems ?? 0;
+                const isLowStock = orderCount >= pi.quantity;
+
+                return (
+                  <TouchableRipple
+                    key={pi.id}
+                    onPress={() => {
+                      if (itemPickerIndex !== null) selectPurchaseItem(items[itemPickerIndex].id, pi);
+                    }}
+                    style={styles.modalItem}
+                  >
+                    <View>
+                      <Text variant="bodyLarge" style={{ color: theme.colors.onSurface }}>{pi.name}</Text>
+                      <Text variant="bodySmall" style={{ color: theme.colors.onSurfaceVariant }}>
+                        Stock: {pi.quantity} • {formatIDR(Math.round(parseFloat(String(pi.totalPrice)) / pi.quantity))} /unit
+                      </Text>
+                      {isLowStock && (
+                        <Text variant="bodySmall" style={{ color: theme.colors.error, marginTop: 4 }}>
+                          ⚠️ Stock critically low - {orderCount} orders vs {pi.quantity} units
+                        </Text>
+                      )}
+                      {orderCount > 0 && !isLowStock && (
+                        <Text variant="bodySmall" style={{ color: theme.colors.onSurfaceVariant, marginTop: 4 }}>
+                          ✓ Used in {orderCount} order{orderCount !== 1 ? 's' : ''}
+                        </Text>
+                      )}
+                    </View>
+                  </TouchableRipple>
+                );
+              })}
               {purchaseItems.length === 0 && (
                 <Text style={{ padding: 16, color: theme.colors.onSurfaceVariant }}>No purchase items available</Text>
               )}
@@ -533,6 +561,7 @@ const styles = StyleSheet.create({
   // Edit item rows
   itemCard: { borderRadius: 8, padding: 12, marginBottom: 12 },
   itemHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 },
+  warningBox: { borderRadius: 4, padding: 8, marginBottom: 8 },
   picker: { borderWidth: 1, borderRadius: 4, padding: 14, marginBottom: 8 },
   input: { marginBottom: 8 },
   addBtn: { marginBottom: 12 },

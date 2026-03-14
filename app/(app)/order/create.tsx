@@ -189,6 +189,10 @@ export default function CreateOrderScreen() {
 
         {items.map((row, idx) => {
           const subtotal = (parseFloat(row.quantity) || 0) * (parseFloat(row.unitPrice) || 0);
+          const selectedItem = purchaseItems.find(pi => pi.id === row.purchaseItemId);
+          const orderCount = selectedItem?._count?.orderItems ?? 0;
+          const isLowStock = selectedItem && orderCount >= selectedItem.quantity;
+
           return (
             <Surface key={row.id} style={[styles.itemCard, { backgroundColor: theme.colors.surfaceVariant }]} elevation={0}>
               <View style={styles.itemHeader}>
@@ -197,6 +201,14 @@ export default function CreateOrderScreen() {
                   <IconButton icon="close" size={18} onPress={() => removeItem(row.id)} />
                 )}
               </View>
+
+              {isLowStock && (
+                <View style={[styles.warningBox, { backgroundColor: theme.colors.errorContainer }]}>
+                  <Text variant="labelSmall" style={{ color: theme.colors.onErrorContainer }}>
+                    ⚠️ Stock critically low - {orderCount} orders vs {selectedItem.quantity} units
+                  </Text>
+                </View>
+              )}
 
               <TouchableRipple
                 onPress={() => setItemPickerIndex(idx)}
@@ -335,6 +347,9 @@ export default function CreateOrderScreen() {
             <ScrollView>
               {purchaseItems.map((pi) => {
                 const displayPrice = pi.sellPerPrice ?? Math.round(parseFloat(String(pi.totalPrice)) / pi.quantity);
+                const orderCount = pi._count?.orderItems ?? 0;
+                const isLowStock = orderCount >= pi.quantity;
+
                 return (
                   <TouchableRipple
                     key={pi.id}
@@ -350,6 +365,16 @@ export default function CreateOrderScreen() {
                       <Text variant="bodySmall" style={{ color: theme.colors.onSurfaceVariant }}>
                         Stock: {pi.quantity} • {formatIDR(displayPrice)} /unit
                       </Text>
+                      {isLowStock && (
+                        <Text variant="bodySmall" style={{ color: theme.colors.error, marginTop: 4 }}>
+                          ⚠️ Stock critically low - {orderCount} orders vs {pi.quantity} units
+                        </Text>
+                      )}
+                      {orderCount > 0 && !isLowStock && (
+                        <Text variant="bodySmall" style={{ color: theme.colors.onSurfaceVariant, marginTop: 4 }}>
+                          ✓ Used in {orderCount} order{orderCount !== 1 ? 's' : ''}
+                        </Text>
+                      )}
                     </View>
                   </TouchableRipple>
                 );
@@ -399,6 +424,11 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: 4,
+  },
+  warningBox: {
+    borderRadius: 4,
+    padding: 8,
+    marginBottom: 8,
   },
   row: { flexDirection: 'row', alignItems: 'flex-start' },
   spacer: { width: 8 },

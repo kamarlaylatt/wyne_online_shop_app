@@ -42,7 +42,7 @@ export default function InventoryScreen() {
   const renderItem = ({ item }: { item: PurchaseItem }) => (
     <List.Item
       title={item.name}
-      description={`Qty: ${item.quantity} • ${item.supplier?.name ?? 'Unknown Supplier'} • ${formatDate(item.purchaseDate)}`}
+      description={`Qty: ${item.quantity} • Orders: ${item._count?.orderItems ?? 0}`}
       onPress={() => router.push(`/(app)/purchase-item/${item.id}`)}
       left={(props) => <List.Icon {...props} icon="package-variant" />}
       style={{ backgroundColor: theme.colors.surface }}

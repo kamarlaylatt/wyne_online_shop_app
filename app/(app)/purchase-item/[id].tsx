@@ -282,6 +282,15 @@ export default function PurchaseItemDetailScreen() {
               </Text>
             </View>
 
+            <View style={styles.section}>
+              <Text variant="titleSmall" style={{ color: theme.colors.onBackground }}>
+                Used in Orders
+              </Text>
+              <Text variant="headlineSmall" style={{ color: theme.colors.primary }}>
+                {item._count?.orderItems ?? 0} order{(item._count?.orderItems ?? 0) !== 1 ? 's' : ''}
+              </Text>
+            </View>
+
             <Divider style={styles.divider} />
 
             <Button
