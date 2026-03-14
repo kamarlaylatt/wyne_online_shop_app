@@ -1,17 +1,30 @@
 import React from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
-import { Card, Text, useTheme } from 'react-native-paper';
+import { ActivityIndicator, Card, Text, useTheme } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
-
-const stats = [
-  { label: 'Total Orders', value: '—', icon: '📋' },
-  { label: 'Paid Orders', value: '—', icon: '💰' },
-  { label: 'Inventory Items', value: '—', icon: '📦' },
-  { label: 'Total Customers', value: '—', icon: '👥' },
-];
+import { useOrders } from '@/hooks/useOrders';
+import { usePurchaseItems } from '@/hooks/useInventory';
+import { useCustomers } from '@/hooks/useCustomers';
 
 export default function DashboardScreen() {
   const theme = useTheme();
+  const { data: orders, isPending: ordersLoading } = useOrders();
+  const { data: purchaseItems, isPending: itemsLoading } = usePurchaseItems();
+  const { data: customers, isPending: customersLoading } = useCustomers();
+
+  const isLoading = ordersLoading || itemsLoading || customersLoading;
+
+  const totalOrders = orders?.length ?? 0;
+  const paidOrders = orders?.filter((o) => o.paymentStatus === 'PAID').length ?? 0;
+  const inventoryItems = purchaseItems?.length ?? 0;
+  const totalCustomers = customers?.length ?? 0;
+
+  const stats = [
+    { label: 'Total Orders', value: isLoading ? null : String(totalOrders), icon: '📋' },
+    { label: 'Paid Orders', value: isLoading ? null : String(paidOrders), icon: '💰' },
+    { label: 'Inventory Items', value: isLoading ? null : String(inventoryItems), icon: '📦' },
+    { label: 'Total Customers', value: isLoading ? null : String(totalCustomers), icon: '👥' },
+  ];
 
   return (
     <SafeAreaView style={[styles.root, { backgroundColor: theme.colors.background }]}>
@@ -24,9 +37,13 @@ export default function DashboardScreen() {
             <Card key={stat.label} style={[styles.card, { backgroundColor: theme.colors.surface }]}>
               <Card.Content style={styles.cardContent}>
                 <Text style={styles.icon}>{stat.icon}</Text>
-                <Text variant="headlineMedium" style={{ color: theme.colors.primary }}>
-                  {stat.value}
-                </Text>
+                {stat.value === null ? (
+                  <ActivityIndicator size="small" color={theme.colors.primary} />
+                ) : (
+                  <Text variant="headlineMedium" style={{ color: theme.colors.primary }}>
+                    {stat.value}
+                  </Text>
+                )}
                 <Text variant="bodySmall" style={{ color: theme.colors.onSurfaceVariant }}>
                   {stat.label}
                 </Text>
