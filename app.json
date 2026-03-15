@@ -19,7 +19,8 @@
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
       },
       "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "package": "com.kamarehtha96.wyne_online_shop_app"
     },
     "web": {
       "output": "static",
@@ -44,6 +45,13 @@
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
+    },
+    "extra": {
+      "apiBaseUrl": "http://157.245.197.26",
+      "router": {},
+      "eas": {
+        "projectId": "9bc0728e-0123-4b25-ad5c-fbfa99b1b8e6"
+      }
     }
   }
 }

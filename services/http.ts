@@ -1,8 +1,11 @@
 import axios from 'axios';
+import Constants from 'expo-constants';
 import { authClient } from './authClient';
 
+const baseUrl = Constants.expoConfig?.extra?.apiBaseUrl ?? 'http://157.245.197.26';
+
 const http = axios.create({
-  baseURL: (process.env.EXPO_PUBLIC_API_BASE_URL ?? 'http://localhost:3000') + '/api/admin',
+  baseURL: baseUrl + '/api/admin',
   timeout: 15000,
 });
 
