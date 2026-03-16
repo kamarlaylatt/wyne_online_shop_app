@@ -295,6 +295,86 @@ export default function OrdersScreen() {
           <Dialog.Content style={styles.dialogContentContainer}>
             <ScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={styles.dialogContent}>
               <Text variant="labelMedium" style={{ color: theme.colors.onSurfaceVariant, marginTop: 8 }}>
+                From Date
+              </Text>
+              <View style={styles.dateInputRow}>
+                <TouchableRipple
+                  onPress={() => setDatePickerVisible('from')}
+                  style={[styles.picker, styles.flex1, { borderColor: theme.colors.outline }]}
+                >
+                  <Text style={{ color: draftFromDate ? theme.colors.onSurface : theme.colors.onSurfaceVariant }}>
+                    {formatDateDisplay(draftFromDate)}
+                  </Text>
+                </TouchableRipple>
+                {draftFromDate && (
+                  <IconButton
+                    icon="close"
+                    size={20}
+                    onPress={() => setDraftFromDate(null)}
+                    style={styles.clearDateBtn}
+                  />
+                )}
+              </View>
+
+              <Text variant="labelMedium" style={{ color: theme.colors.onSurfaceVariant, marginTop: 16 }}>
+                To Date
+              </Text>
+              <View style={styles.dateInputRow}>
+                <TouchableRipple
+                  onPress={() => setDatePickerVisible('to')}
+                  style={[styles.picker, styles.flex1, { borderColor: theme.colors.outline }]}
+                >
+                  <Text style={{ color: draftToDate ? theme.colors.onSurface : theme.colors.onSurfaceVariant }}>
+                    {formatDateDisplay(draftToDate)}
+                  </Text>
+                </TouchableRipple>
+                {draftToDate && (
+                  <IconButton
+                    icon="close"
+                    size={20}
+                    onPress={() => setDraftToDate(null)}
+                    style={styles.clearDateBtn}
+                  />
+                )}
+              </View>
+
+              <Text variant="labelMedium" style={{ color: theme.colors.onSurfaceVariant, marginTop: 16 }}>
+                Order ID
+              </Text>
+              <TextInput
+                placeholder="Enter order ID"
+                value={draftOrderId}
+                onChangeText={setDraftOrderId}
+                mode="outlined"
+                dense
+                style={styles.dialogInput}
+              />
+
+              <Text variant="labelMedium" style={{ color: theme.colors.onSurfaceVariant, marginTop: 16 }}>
+                Customer
+              </Text>
+              <TouchableRipple
+                onPress={() => { setCustomerSearch(''); setCustomerPickerVisible(true); }}
+                style={[styles.picker, { borderColor: theme.colors.outline }]}
+              >
+                <Text style={{ color: draftCustomer ? theme.colors.onSurface : theme.colors.onSurfaceVariant }}>
+                  {draftCustomer ? draftCustomer.name : 'Select customer…'}
+                </Text>
+              </TouchableRipple>
+
+              <Text variant="labelMedium" style={{ color: theme.colors.onSurfaceVariant, marginTop: 16 }}>
+                Purchase Item
+              </Text>
+              <TouchableRipple
+                onPress={() => { setPurchaseItemSearch(''); setPurchaseItemPickerVisible(true); }}
+                style={[styles.picker, { borderColor: theme.colors.outline }]}
+              >
+                <Text style={{ color: draftPurchaseItem ? theme.colors.onSurface : theme.colors.onSurfaceVariant }}>
+                  {draftPurchaseItem ? draftPurchaseItem.name : 'Select purchase item…'}
+                </Text>
+              </TouchableRipple>
+
+              <Text variant="labelMedium" style={{ color: theme.colors.onSurfaceVariant, marginTop: 16 }}>
                 Status
               </Text>
               <View style={styles.chipRow}>
@@ -346,86 +426,6 @@ export default function OrdersScreen() {
                     {p}
                   </Chip>
                 ))}
-              </View>
-
-              <Text variant="labelMedium" style={{ color: theme.colors.onSurfaceVariant, marginTop: 16 }}>
-                Order ID
-              </Text>
-              <TextInput
-                placeholder="Enter order ID"
-                value={draftOrderId}
-                onChangeText={setDraftOrderId}
-                mode="outlined"
-                dense
-                style={styles.dialogInput}
-              />
-
-              <Text variant="labelMedium" style={{ color: theme.colors.onSurfaceVariant, marginTop: 16 }}>
-                Customer
-              </Text>
-              <TouchableRipple
-                onPress={() => { setCustomerSearch(''); setCustomerPickerVisible(true); }}
-                style={[styles.picker, { borderColor: theme.colors.outline }]}
-              >
-                <Text style={{ color: draftCustomer ? theme.colors.onSurface : theme.colors.onSurfaceVariant }}>
-                  {draftCustomer ? draftCustomer.name : 'Select customer…'}
-                </Text>
-              </TouchableRipple>
-
-              <Text variant="labelMedium" style={{ color: theme.colors.onSurfaceVariant, marginTop: 16 }}>
-                Purchase Item
-              </Text>
-              <TouchableRipple
-                onPress={() => { setPurchaseItemSearch(''); setPurchaseItemPickerVisible(true); }}
-                style={[styles.picker, { borderColor: theme.colors.outline }]}
-              >
-                <Text style={{ color: draftPurchaseItem ? theme.colors.onSurface : theme.colors.onSurfaceVariant }}>
-                  {draftPurchaseItem ? draftPurchaseItem.name : 'Select purchase item…'}
-                </Text>
-              </TouchableRipple>
-
-              <Text variant="labelMedium" style={{ color: theme.colors.onSurfaceVariant, marginTop: 16 }}>
-                From Date
-              </Text>
-              <View style={styles.dateInputRow}>
-                <TouchableRipple
-                  onPress={() => setDatePickerVisible('from')}
-                  style={[styles.picker, styles.flex1, { borderColor: theme.colors.outline }]}
-                >
-                  <Text style={{ color: draftFromDate ? theme.colors.onSurface : theme.colors.onSurfaceVariant }}>
-                    {formatDateDisplay(draftFromDate)}
-                  </Text>
-                </TouchableRipple>
-                {draftFromDate && (
-                  <IconButton
-                    icon="close"
-                    size={20}
-                    onPress={() => setDraftFromDate(null)}
-                    style={styles.clearDateBtn}
-                  />
-                )}
-              </View>
-
-              <Text variant="labelMedium" style={{ color: theme.colors.onSurfaceVariant, marginTop: 16 }}>
-                To Date
-              </Text>
-              <View style={styles.dateInputRow}>
-                <TouchableRipple
-                  onPress={() => setDatePickerVisible('to')}
-                  style={[styles.picker, styles.flex1, { borderColor: theme.colors.outline }]}
-                >
-                  <Text style={{ color: draftToDate ? theme.colors.onSurface : theme.colors.onSurfaceVariant }}>
-                    {formatDateDisplay(draftToDate)}
-                  </Text>
-                </TouchableRipple>
-                {draftToDate && (
-                  <IconButton
-                    icon="close"
-                    size={20}
-                    onPress={() => setDraftToDate(null)}
-                    style={styles.clearDateBtn}
-                  />
-                )}
               </View>
             </ScrollView>
           </Dialog.Content>
