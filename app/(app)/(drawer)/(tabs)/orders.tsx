@@ -23,10 +23,23 @@ import { useOrders, useOrderPreload } from '@/hooks/useOrders';
 import type { Order, OrderStatus, PaymentStatus, Customer, PurchaseItem } from '@/types/models';
 import type { OrderFilters } from '@/services/api';
 
-const formatIDR = (value: number | string) =>
-  new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(
-    parseFloat(String(value))
-  );
+const formatIDR = (value: number | string) => {
+  const num = parseFloat(String(value));
+  const formatted = new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(num);
+  return `💰 ${formatted}`;
+};
+
+const formatOrderDate = (dateString: string) => {
+  const date = new Date(dateString);
+  return date.toLocaleDateString('id-ID', { year: 'numeric', month: 'short', day: 'numeric' });
+};
+
+const getOrderItemNames = (order: Order): string => {
+  if (!order.orderItems || order.orderItems.length === 0) return 'No items';
+  return order.orderItems
+    .map((item) => item.purchaseItem?.name || 'Unknown')
+    .join(', ');
+};
 
 const statusMode = (status: OrderStatus): 'outlined' | 'flat' => {
   if (status === 'PENDING') return 'outlined';
@@ -210,8 +223,9 @@ export default function OrdersScreen() {
 
   const renderItem = ({ item }: { item: Order }) => (
     <List.Item
-      title={item.customer?.name ?? `Order ${item.id.slice(0, 8)}`}
-      description={`ID: ${item.id.slice(0, 8)}... • ${formatIDR(item.totalPrice)}`}
+      title={item.customer?.name ?? 'Unknown Customer'}
+      description={`${formatOrderDate(item.createdAt)} • ${formatIDR(item.totalPrice)}\n${getOrderItemNames(item)}`}
+      descriptionNumberOfLines={2}
       onPress={() => router.push(`/(app)/order/${item.id}`)}
       right={() => (
         <View style={styles.chipContainer}>
