@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ScrollView, StyleSheet, View } from 'react-native';
+import { Clipboard, ScrollView, StyleSheet, View } from 'react-native';
 import {
   ActivityIndicator,
   Button,
@@ -81,6 +81,11 @@ export default function CustomerDetailScreen() {
     });
   };
 
+  const handleCopyCustomerId = () => {
+    Clipboard.setString(customer.id);
+    setSnackMessage('Customer ID copied to clipboard');
+  };
+
   if (isPending) {
     return (
       <SafeAreaView style={[styles.root, { backgroundColor: theme.colors.background }]}>
@@ -111,9 +116,12 @@ export default function CustomerDetailScreen() {
             {isEditing ? 'Edit Customer' : customer.name}
           </Text>
           {!isEditing && (
-            <Text variant="bodySmall" style={{ color: theme.colors.onSurfaceVariant, marginTop: 4 }}>
-              ID: {customer.id}
-            </Text>
+            <View style={styles.idRow}>
+              <Text variant="bodySmall" style={{ color: theme.colors.onSurfaceVariant }}>
+                ID: {customer.id}
+              </Text>
+              <IconButton icon="content-copy" size={16} onPress={handleCopyCustomerId} />
+            </View>
           )}
         </View>
         <IconButton icon={isEditing ? 'close' : 'pencil'} onPress={handleEditToggle} />
@@ -166,25 +174,29 @@ export default function CustomerDetailScreen() {
           </>
         ) : (
           <>
-            <View style={styles.section}>
-              <Text variant="titleSmall" style={{ color: theme.colors.onBackground }}>
-                Phone
-              </Text>
-              <Text variant="bodyMedium" style={{ color: theme.colors.onSurfaceVariant }}>
-                {customer.phone ?? '—'}
-              </Text>
-            </View>
+            {customer.phone && (
+              <View style={styles.section}>
+                <Text variant="titleSmall" style={{ color: theme.colors.onBackground }}>
+                  Phone
+                </Text>
+                <Text variant="bodyMedium" style={{ color: theme.colors.onSurfaceVariant }}>
+                  {customer.phone}
+                </Text>
+              </View>
+            )}
 
-            <View style={styles.section}>
-              <Text variant="titleSmall" style={{ color: theme.colors.onBackground }}>
-                Address
-              </Text>
-              <Text variant="bodyMedium" style={{ color: theme.colors.onSurfaceVariant }}>
-                {customer.address ?? '—'}
-              </Text>
-            </View>
+            {customer.address && (
+              <View style={styles.section}>
+                <Text variant="titleSmall" style={{ color: theme.colors.onBackground }}>
+                  Address
+                </Text>
+                <Text variant="bodyMedium" style={{ color: theme.colors.onSurfaceVariant }}>
+                  {customer.address}
+                </Text>
+              </View>
+            )}
 
-            <Divider style={styles.divider} />
+            {(customer.phone || customer.address) && <Divider style={styles.divider} />}
 
             <Button
               mode="outlined"
@@ -237,6 +249,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 12,
   },
+  idRow: { flexDirection: 'row', alignItems: 'center', marginTop: 4, gap: 0 },
   content: { padding: 16, paddingBottom: 40 },
   section: { marginTop: 16, gap: 4 },
   divider: { marginVertical: 16 },
