@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Modal, ScrollView, StyleSheet, View } from 'react-native';
+import { Clipboard, Modal, ScrollView, StyleSheet, View } from 'react-native';
 import {
   ActivityIndicator,
   Button,
@@ -162,6 +162,11 @@ export default function OrderDetailScreen() {
     });
   };
 
+  const handleCopyOrderId = () => {
+    Clipboard.setString(order.id);
+    setSnackMessage('Order ID copied to clipboard');
+  };
+
   if (isPending) {
     return (
       <SafeAreaView style={[styles.root, { backgroundColor: theme.colors.background }]}>
@@ -209,9 +214,12 @@ export default function OrderDetailScreen() {
             <Text variant="titleLarge" style={{ color: theme.colors.onBackground, fontWeight: '700' }}>
               Order Detail
             </Text>
-            <Text variant="bodySmall" style={{ color: theme.colors.onSurfaceVariant, marginTop: 2 }}>
-              ID: {order.id}
-            </Text>
+            <View style={styles.idRow}>
+              <Text variant="bodySmall" style={{ color: theme.colors.onSurfaceVariant }}>
+                ID: {order.id}
+              </Text>
+              <IconButton icon="content-copy" size={16} onPress={handleCopyOrderId} />
+            </View>
           </View>
           {!editing ? (
             <View style={styles.headerButtons}>
@@ -549,6 +557,7 @@ const styles = StyleSheet.create({
   content: { padding: 16, paddingBottom: 40 },
   headerRow: { flexDirection: 'row', alignItems: 'flex-start', marginBottom: 4 },
   headerButtons: { flexDirection: 'row', gap: 4 },
+  idRow: { flexDirection: 'row', alignItems: 'center', marginTop: 2, gap: 0 },
   flex1: { flex: 1 },
   flex2: { flex: 2 },
   section: { marginTop: 16, gap: 4 },
