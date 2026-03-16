@@ -287,7 +287,7 @@ export default function PurchaseItemDetailScreen() {
                 Used in Orders
               </Text>
               <Text variant="headlineSmall" style={{ color: theme.colors.primary }}>
-                {item._count?.orderItems ?? 0} order{(item._count?.orderItems ?? 0) !== 1 ? 's' : ''}
+                {item.orderItemsQuantity ?? 0} order{(item.orderItemsQuantity ?? 0) !== 1 ? 's' : ''}
               </Text>
             </View>
 

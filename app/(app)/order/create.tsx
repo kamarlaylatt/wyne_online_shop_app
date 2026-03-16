@@ -190,7 +190,7 @@ export default function CreateOrderScreen() {
         {items.map((row, idx) => {
           const subtotal = (parseFloat(row.quantity) || 0) * (parseFloat(row.unitPrice) || 0);
           const selectedItem = purchaseItems.find(pi => pi.id === row.purchaseItemId);
-          const orderCount = selectedItem?._count?.orderItems ?? 0;
+          const orderCount = selectedItem?.orderItemsQuantity ?? 0;
           const isLowStock = selectedItem && orderCount >= selectedItem.quantity;
 
           return (
@@ -347,7 +347,7 @@ export default function CreateOrderScreen() {
             <ScrollView>
               {purchaseItems.map((pi) => {
                 const displayPrice = pi.sellPerPrice ?? Math.round(parseFloat(String(pi.totalPrice)) / pi.quantity);
-                const orderCount = pi._count?.orderItems ?? 0;
+                const orderCount = pi.orderItemsQuantity ?? 0;
                 const isLowStock = orderCount >= pi.quantity;
 
                 return (

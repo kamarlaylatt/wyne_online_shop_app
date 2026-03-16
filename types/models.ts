@@ -33,7 +33,7 @@ export interface PurchaseItem {
   createdAt: string;
   updatedAt: string;
   supplier?: Supplier;
-  _count?: { orderItems: number };
+  orderItemsQuantity?: number;
 }
 
 export interface Order {
