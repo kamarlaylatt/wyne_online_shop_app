@@ -1,12 +1,12 @@
 import { useInfiniteQuery, useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import type { InfiniteData } from '@tanstack/react-query';
-import { api } from '@/services/api';
+import { api, type OrderFilters } from '@/services/api';
 import type { PaginatedResponse, Order } from '@/types/models';
 
-export function useOrders() {
+export function useOrders(filters?: OrderFilters) {
   return useInfiniteQuery({
-    queryKey: ['orders'],
-    queryFn: ({ pageParam }) => api.getOrders(pageParam),
+    queryKey: ['orders', filters],
+    queryFn: ({ pageParam }) => api.getOrders(pageParam, filters),
     initialPageParam: 1,
     getNextPageParam: (lastPage) =>
       lastPage.page < lastPage.totalPages ? lastPage.page + 1 : undefined,
@@ -19,8 +19,22 @@ export function useOrder(id: string) {
     queryKey: ['orders', id],
     queryFn: () => api.getOrder(id),
     initialData: () => {
-      const cached = qc.getQueryData<InfiniteData<PaginatedResponse<Order>>>(['orders']);
-      return cached?.pages.flatMap((p) => p.data).find((o) => o.id === id);
+      // Search for the order in any orders query (filtered or unfiltered)
+      const cache = qc.getQueryCache();
+      const allQueries = cache.getAll();
+
+      for (const query of allQueries) {
+        const [firstKey] = query.queryKey;
+        if (firstKey === 'orders' && Array.isArray(query.queryKey)) {
+          const data = query.state.data as InfiniteData<PaginatedResponse<Order>> | undefined;
+          if (data?.pages) {
+            const found = data.pages.flatMap((p) => p.data).find((o) => o.id === id);
+            if (found) return found;
+          }
+        }
+      }
+
+      return undefined;
     },
     retry: (_, err: any) => err?.response?.status !== 404,
   });

@@ -3,6 +3,16 @@ import type { Supplier, Customer, PurchaseItem, Order, OrderItem, OrderStatus, P
 
 export type OrderItemInput = { purchaseItemId: string; quantity: number; unitPrice: number };
 
+export type OrderFilters = {
+  id?: string;
+  customerId?: string;
+  purchaseItemId?: string;
+  status?: OrderStatus;
+  paymentStatus?: PaymentStatus;
+  fromCreatedAt?: string;
+  toCreatedAt?: string;
+};
+
 export type UpdateOrderBody = {
   customerId?: string;
   status?: OrderStatus;
@@ -63,8 +73,8 @@ export const api = {
     http.delete(`/purchase-items/${id}`).then((r) => r.data),
 
   // Orders
-  getOrders: (page = 1, limit = 20): Promise<PaginatedResponse<Order>> =>
-    http.get('/orders', { params: { page, limit } }).then((r) => r.data),
+  getOrders: (page = 1, filters?: OrderFilters, limit = 20): Promise<PaginatedResponse<Order>> =>
+    http.get('/orders', { params: { page, limit, ...filters } }).then((r) => r.data),
   getOrder: (id: string): Promise<Order> =>
     http.get(`/orders/${id}`).then((r) => r.data),
   getOrderPreload: (): Promise<{ purchaseItems: PurchaseItem[]; customers: Customer[] }> =>
