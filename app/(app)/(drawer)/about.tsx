@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Image } from 'react-native';
 import { Text, useTheme, Divider } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -8,7 +8,10 @@ export default function AboutScreen() {
   return (
     <SafeAreaView style={[styles.root, { backgroundColor: theme.colors.background }]}>
       <View style={styles.content}>
-        <Text style={{ fontSize: 64, textAlign: 'center' }}>🛒</Text>
+        <Image
+          source={require('../../../assets/images/wyne-shop-icon.jpg')}
+          style={styles.icon}
+        />
         <Text variant="headlineSmall" style={[styles.title, { color: theme.colors.primary }]}>
           Wyne Online Shop
         </Text>
@@ -30,6 +33,7 @@ export default function AboutScreen() {
 const styles = StyleSheet.create({
   root: { flex: 1 },
   content: { flex: 1, alignItems: 'center', justifyContent: 'center', padding: 24, gap: 8 },
+  icon: { width: 200, height: 150, resizeMode: 'contain' },
   title: { fontWeight: '700', textAlign: 'center' },
   subtitle: { textAlign: 'center' },
   divider: { width: '60%', marginVertical: 16 },

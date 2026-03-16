@@ -1,10 +1,10 @@
 {
   "expo": {
-    "name": "wyne_online_shop_app",
+    "name": "Wyne's Online Shopping",
     "slug": "wyne_online_shop_app",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/wyne-shop-icon.png",
+    "icon": "./assets/images/wyne-shop-icon.jpg",
     "scheme": "wyneonlineshopapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
