@@ -22,12 +22,7 @@ import { useRouter } from 'expo-router';
 import { useOrders, useOrderPreload } from '@/hooks/useOrders';
 import type { Order, OrderStatus, PaymentStatus, Customer, PurchaseItem } from '@/types/models';
 import type { OrderFilters } from '@/services/api';
-
-const formatIDR = (value: number | string) => {
-  const num = parseFloat(String(value));
-  const formatted = new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(num);
-  return `💰 ${formatted}`;
-};
+import { formatIDR } from '@/utils/formatting';
 
 const formatOrderDate = (dateString: string) => {
   const date = new Date(dateString);

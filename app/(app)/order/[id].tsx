@@ -22,11 +22,7 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useOrder, useOrderItems, useOrderPreload, useUpdateOrder, useDeleteOrder } from '@/hooks/useOrders';
 import type { Customer, OrderStatus, PaymentStatus, PurchaseItem } from '@/types/models';
-
-const formatIDR = (value: number | string) =>
-  new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(
-    parseFloat(String(value))
-  );
+import { formatIDR } from '@/utils/formatting';
 
 const formatDate = (str: string) => new Date(str).toLocaleDateString('id-ID');
 

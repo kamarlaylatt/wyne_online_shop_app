@@ -18,11 +18,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { usePurchaseItem, useUpdatePurchaseItem, useDeletePurchaseItem } from '@/hooks/useInventory';
 import { useSuppliers } from '@/hooks/useSuppliers';
 import type { Supplier } from '@/types/models';
-
-const formatIDR = (value: number | string) =>
-  new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(
-    parseFloat(String(value))
-  );
+import { formatIDR } from '@/utils/formatting';
 
 const formatDate = (str: string) => new Date(str).toLocaleDateString('id-ID');
 

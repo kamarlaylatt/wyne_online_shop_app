@@ -18,6 +18,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { useOrderPreload, useCreateOrder } from '@/hooks/useOrders';
 import type { Customer, OrderStatus, PaymentStatus, PurchaseItem } from '@/types/models';
+import { formatIDR } from '@/utils/formatting';
 
 type CustomerMode = 'existing' | 'new';
 
@@ -28,9 +29,6 @@ type ItemRow = {
   quantity: string;
   unitPrice: string;
 };
-
-const formatIDR = (value: number) =>
-  new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(value);
 
 export default function CreateOrderScreen() {
   const theme = useTheme();
