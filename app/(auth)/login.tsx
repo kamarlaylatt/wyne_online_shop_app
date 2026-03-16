@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, KeyboardAvoidingView, Platform } from 'react-native';
+import { View, StyleSheet, KeyboardAvoidingView, Platform, Image } from 'react-native';
 import { Text, TextInput, Button, HelperText, useTheme } from 'react-native-paper';
 import { authClient } from '@/services/authClient';
 import { useRouter } from 'expo-router';
@@ -43,8 +43,13 @@ export default function LoginScreen() {
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
     >
       <View style={styles.card}>
+        <Image
+          source={require('@/assets/images/wyne-shop-icon.jpg')}
+          style={styles.logo}
+          resizeMode="contain"
+        />
         <Text variant="headlineMedium" style={[styles.title, { color: theme.colors.primary }]}>
-          Wyne Admin
+          Wyne's Online Shopping
         </Text>
         <Text variant="bodyMedium" style={[styles.subtitle, { color: theme.colors.onSurfaceVariant }]}>
           Sign in to manage your shop
@@ -102,6 +107,12 @@ const styles = StyleSheet.create({
   },
   card: {
     gap: 4,
+  },
+  logo: {
+    width: 200,
+    height: 150,
+    alignSelf: 'center',
+    marginBottom: 24,
   },
   title: {
     fontWeight: '700',
