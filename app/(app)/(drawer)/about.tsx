@@ -6,7 +6,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 export default function AboutScreen() {
   const theme = useTheme();
   return (
-    <SafeAreaView style={[styles.root, { backgroundColor: theme.colors.background }]}>
+    <SafeAreaView edges={['left', 'right']} style={[styles.root, { backgroundColor: theme.colors.background }]}>
       <View style={styles.content}>
         <Image
           source={require('../../../assets/images/wyne-shop-icon.jpg')}

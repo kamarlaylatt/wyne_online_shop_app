@@ -169,7 +169,7 @@ export default function OrderDetailScreen() {
 
   if (isPending) {
     return (
-      <SafeAreaView style={[styles.root, { backgroundColor: theme.colors.background }]}>
+      <SafeAreaView edges={['left', 'right']} style={[styles.root, { backgroundColor: theme.colors.background }]}>
         <View style={styles.center}>
           <ActivityIndicator size="large" color={theme.colors.primary} />
         </View>
@@ -179,7 +179,7 @@ export default function OrderDetailScreen() {
 
   if (isError) {
     return (
-      <SafeAreaView style={[styles.root, { backgroundColor: theme.colors.background }]}>
+      <SafeAreaView edges={['left', 'right']} style={[styles.root, { backgroundColor: theme.colors.background }]}>
         <View style={styles.center}>
           <Text variant="titleMedium" style={{ color: theme.colors.error }}>
             Failed to load order
@@ -191,7 +191,7 @@ export default function OrderDetailScreen() {
 
   if (!order) {
     return (
-      <SafeAreaView style={[styles.root, { backgroundColor: theme.colors.background }]}>
+      <SafeAreaView edges={['left', 'right']} style={[styles.root, { backgroundColor: theme.colors.background }]}>
         <View style={styles.center}>
           <Text variant="titleMedium" style={{ color: theme.colors.error }}>
             Order not found
@@ -205,7 +205,7 @@ export default function OrderDetailScreen() {
   const resolvedItems = fetchedItems ?? order.orderItems ?? [];
 
   return (
-    <SafeAreaView style={[styles.root, { backgroundColor: theme.colors.background }]}>
+    <SafeAreaView edges={['left', 'right']} style={[styles.root, { backgroundColor: theme.colors.background }]}>
       <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
 
         {/* ── Header ── */}

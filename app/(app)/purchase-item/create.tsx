@@ -78,7 +78,7 @@ export default function CreatePurchaseItemScreen() {
 
   if (suppliersLoading) {
     return (
-      <SafeAreaView style={[styles.root, { backgroundColor: theme.colors.background }]}>
+      <SafeAreaView edges={['left', 'right']} style={[styles.root, { backgroundColor: theme.colors.background }]}>
         <View style={styles.center}>
           <ActivityIndicator size="large" color={theme.colors.primary} />
         </View>
@@ -89,7 +89,7 @@ export default function CreatePurchaseItemScreen() {
   const suppliersList = suppliers ?? [];
 
   return (
-    <SafeAreaView style={[styles.root, { backgroundColor: theme.colors.background }]}>
+    <SafeAreaView edges={['left', 'right']} style={[styles.root, { backgroundColor: theme.colors.background }]}>
       <ScrollView contentContainerStyle={styles.scroll} keyboardShouldPersistTaps="handled">
         <Text variant="titleMedium" style={[styles.sectionTitle, { color: theme.colors.onBackground }]}>
           Item Name *

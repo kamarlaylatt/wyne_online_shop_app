@@ -113,7 +113,7 @@ export default function PurchaseItemDetailScreen() {
 
   if (isPending) {
     return (
-      <SafeAreaView style={[styles.root, { backgroundColor: theme.colors.background }]}>
+      <SafeAreaView edges={['left', 'right']} style={[styles.root, { backgroundColor: theme.colors.background }]}>
         <View style={styles.center}>
           <ActivityIndicator size="large" color={theme.colors.primary} />
         </View>
@@ -123,7 +123,7 @@ export default function PurchaseItemDetailScreen() {
 
   if (isError || !item) {
     return (
-      <SafeAreaView style={[styles.root, { backgroundColor: theme.colors.background }]}>
+      <SafeAreaView edges={['left', 'right']} style={[styles.root, { backgroundColor: theme.colors.background }]}>
         <View style={styles.center}>
           <Text variant="titleMedium" style={{ color: theme.colors.error }}>
             Failed to load item
@@ -136,7 +136,7 @@ export default function PurchaseItemDetailScreen() {
   const suppliersList = suppliers ?? [];
 
   return (
-    <SafeAreaView style={[styles.root, { backgroundColor: theme.colors.background }]}>
+    <SafeAreaView edges={['left', 'right']} style={[styles.root, { backgroundColor: theme.colors.background }]}>
       <View style={styles.header}>
         <View style={{ flex: 1 }}>
           <Text variant="titleLarge" style={{ color: theme.colors.onBackground, fontWeight: '700' }}>

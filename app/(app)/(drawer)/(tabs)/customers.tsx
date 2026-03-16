@@ -26,7 +26,7 @@ export default function CustomersScreen() {
 
   if (isPending) {
     return (
-      <SafeAreaView style={[styles.root, { backgroundColor: theme.colors.background }]}>
+      <SafeAreaView edges={['left', 'right']} style={[styles.root, { backgroundColor: theme.colors.background }]}>
         <View style={styles.center}>
           <ActivityIndicator size="large" color={theme.colors.primary} />
         </View>
@@ -37,7 +37,7 @@ export default function CustomersScreen() {
 
   if (isError || !customers?.length) {
     return (
-      <SafeAreaView style={[styles.root, { backgroundColor: theme.colors.background }]}>
+      <SafeAreaView edges={['left', 'right']} style={[styles.root, { backgroundColor: theme.colors.background }]}>
         <View style={styles.center}>
           <Text style={{ fontSize: 40 }}>👥</Text>
           <Text variant="titleMedium" style={{ color: theme.colors.onSurfaceVariant, marginTop: 8 }}>
@@ -75,7 +75,7 @@ export default function CustomersScreen() {
   };
 
   return (
-    <SafeAreaView style={[styles.root, { backgroundColor: theme.colors.background }]}>
+    <SafeAreaView edges={['left', 'right']} style={[styles.root, { backgroundColor: theme.colors.background }]}>
       <FlatList
         data={customers}
         keyExtractor={(item) => item.id}

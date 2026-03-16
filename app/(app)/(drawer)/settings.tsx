@@ -9,7 +9,7 @@ export default function SettingsScreen() {
   const { isDarkMode, toggleTheme } = useThemeContext();
 
   return (
-    <SafeAreaView style={[styles.root, { backgroundColor: theme.colors.background }]}>
+    <SafeAreaView edges={['left', 'right']} style={[styles.root, { backgroundColor: theme.colors.background }]}>
       <List.Section>
         <List.Subheader style={{ color: theme.colors.primary }}>Appearance</List.Subheader>
         <List.Item

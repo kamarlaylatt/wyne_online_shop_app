@@ -49,7 +49,7 @@ export default function CreateCustomerScreen() {
   };
 
   return (
-    <SafeAreaView style={[styles.root, { backgroundColor: theme.colors.background }]}>
+    <SafeAreaView edges={['left', 'right']} style={[styles.root, { backgroundColor: theme.colors.background }]}>
       <ScrollView contentContainerStyle={styles.scroll} keyboardShouldPersistTaps="handled">
         <Text variant="titleMedium" style={[styles.sectionTitle, { color: theme.colors.onBackground }]}>
           Customer Name *

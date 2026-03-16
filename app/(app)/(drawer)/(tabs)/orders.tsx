@@ -238,7 +238,7 @@ export default function OrdersScreen() {
   );
 
   return (
-    <SafeAreaView style={[styles.root, { backgroundColor: theme.colors.background }]}>
+    <SafeAreaView edges={['left', 'right']} style={[styles.root, { backgroundColor: theme.colors.background }]}>
       {/* Toolbar: Today chip + Filter icon + Clear button */}
       <View style={[styles.toolbar, { backgroundColor: theme.colors.surface }]}>
         <Chip

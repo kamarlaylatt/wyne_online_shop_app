@@ -20,7 +20,7 @@ export default function SuppliersScreen() {
 
   if (isPending) {
     return (
-      <SafeAreaView style={[styles.root, { backgroundColor: theme.colors.background }]}>
+      <SafeAreaView edges={['left', 'right']} style={[styles.root, { backgroundColor: theme.colors.background }]}>
         <View style={styles.center}>
           <ActivityIndicator size="large" color={theme.colors.primary} />
         </View>
@@ -31,7 +31,7 @@ export default function SuppliersScreen() {
 
   if (isError || !suppliers?.length) {
     return (
-      <SafeAreaView style={[styles.root, { backgroundColor: theme.colors.background }]}>
+      <SafeAreaView edges={['left', 'right']} style={[styles.root, { backgroundColor: theme.colors.background }]}>
         <View style={styles.center}>
           <Text style={{ fontSize: 40 }}>🏭</Text>
           <Text variant="titleMedium" style={{ color: theme.colors.onSurfaceVariant, marginTop: 8 }}>
@@ -62,7 +62,7 @@ export default function SuppliersScreen() {
   );
 
   return (
-    <SafeAreaView style={[styles.root, { backgroundColor: theme.colors.background }]}>
+    <SafeAreaView edges={['left', 'right']} style={[styles.root, { backgroundColor: theme.colors.background }]}>
       <FlatList
         data={suppliers}
         keyExtractor={(item) => item.id}
