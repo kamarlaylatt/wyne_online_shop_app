@@ -54,8 +54,8 @@ export default function SupplierDetailScreen() {
     updateSupplier(
       {
         name: name.trim(),
-        phone: phone.trim() || undefined,
-        email: email.trim() || null,
+        phone: phone.trim(),
+        email: email.trim(),
       },
       {
         onSuccess: () => {
@@ -63,6 +63,7 @@ export default function SupplierDetailScreen() {
           setSnackMessage('Supplier updated successfully.');
         },
         onError: (err: any) => {
+          console.error('[supplier update error]', err?.response?.data);
           setSnackMessage(err?.response?.data?.message ?? 'Failed to update supplier.');
         },
       }
