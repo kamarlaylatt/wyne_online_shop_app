@@ -3,39 +3,25 @@ import { RefreshControl, ScrollView, StyleSheet, View } from 'react-native';
 import { ActivityIndicator, Button, Card, Text, useTheme } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
-import { useOrders } from '@/hooks/useOrders';
-import { usePurchaseItems } from '@/hooks/useInventory';
-import { useCustomers } from '@/hooks/useCustomers';
+import { useDashboardStats } from '@/hooks/useDashboard';
 
 export default function DashboardScreen() {
   const theme = useTheme();
   const router = useRouter();
-  const { data: ordersData, isPending: ordersLoading, refetch: refetchOrders } = useOrders();
-  const { data: purchaseItemsData, isPending: itemsLoading, refetch: refetchItems } = usePurchaseItems();
-  const { data: customers, isPending: customersLoading, refetch: refetchCustomers } = useCustomers();
+  const { data: dashboardData, isPending: isLoading, refetch } = useDashboardStats();
   const [isRefreshing, setIsRefreshing] = useState(false);
-
-  const isLoading = ordersLoading || itemsLoading || customersLoading;
 
   const onRefresh = async () => {
     setIsRefreshing(true);
-    await Promise.all([refetchOrders(), refetchItems(), refetchCustomers()]);
+    await refetch();
     setIsRefreshing(false);
   };
 
-  const orders = ordersData?.pages.flatMap((p) => p.data) ?? [];
-  const purchaseItems = purchaseItemsData?.pages.flatMap((p) => p.data) ?? [];
-
-  const totalOrders = orders.length;
-  const paidOrders = orders.filter((o) => o.paymentStatus === 'PAID').length;
-  const inventoryItems = purchaseItems.length;
-  const totalCustomers = customers?.length ?? 0;
-
   const stats = [
-    { label: 'Total Orders', value: isLoading ? null : String(totalOrders), icon: '📋' },
-    { label: 'Paid Orders', value: isLoading ? null : String(paidOrders), icon: '💰' },
-    { label: 'Inventory Items', value: isLoading ? null : String(inventoryItems), icon: '📦' },
-    { label: 'Total Customers', value: isLoading ? null : String(totalCustomers), icon: '👥' },
+    { label: 'Total Orders', value: isLoading ? null : String(dashboardData?.total_orders ?? 0), icon: '📋' },
+    { label: 'Paid Orders', value: isLoading ? null : String(dashboardData?.total_paid_orders ?? 0), icon: '💰' },
+    { label: 'Inventory Items', value: isLoading ? null : String(dashboardData?.total_purchase_items ?? 0), icon: '📦' },
+    { label: 'Total Customers', value: isLoading ? null : String(dashboardData?.total_customers ?? 0), icon: '👥' },
   ];
 
   return (

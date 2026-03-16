@@ -14,7 +14,18 @@ export type CreateOrderBody =
   | { customer: { name: string; phone?: string; address?: string }; items: OrderItemInput[]; status?: OrderStatus; paymentStatus?: PaymentStatus }
   | { customerId: string; items: OrderItemInput[]; status?: OrderStatus; paymentStatus?: PaymentStatus };
 
+export type DashboardStats = {
+  total_orders: number;
+  total_paid_orders: number;
+  total_purchase_items: number;
+  total_customers: number;
+};
+
 export const api = {
+  // Dashboard
+  getDashboardStats: (): Promise<DashboardStats> =>
+    http.get('/dashboard').then((r) => r.data),
+
   // Suppliers
   getSuppliers: (): Promise<Supplier[]> =>
     http.get('/suppliers').then((r) => r.data),
