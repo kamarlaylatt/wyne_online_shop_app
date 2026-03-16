@@ -3,6 +3,7 @@ import { Modal, ScrollView, StyleSheet, View } from 'react-native';
 import {
   ActivityIndicator,
   Button,
+  Chip,
   Divider,
   IconButton,
   Menu,
@@ -258,31 +259,34 @@ export default function CreateOrderScreen() {
         <Text variant="titleMedium" style={[styles.sectionTitle, { color: theme.colors.onBackground }]}>
           Order Status
         </Text>
-        <SegmentedButtons
-          value={status}
-          onValueChange={(v) => setStatus(v as OrderStatus)}
-          buttons={[
-            { value: 'PENDING', label: 'Pending' },
-            { value: 'PROCESSING', label: 'Processing' },
-            { value: 'COMPLETED', label: 'Completed' },
-            { value: 'CANCELLED', label: 'Cancelled' },
-          ]}
-          style={styles.segmented}
-        />
+        <View style={styles.chipRow}>
+          {(['PENDING', 'PROCESSING', 'COMPLETED', 'CANCELLED'] as OrderStatus[]).map((s) => (
+            <Chip
+              key={s}
+              selected={status === s}
+              onPress={() => setStatus(s)}
+              style={{ marginRight: 8, marginBottom: 8 }}
+            >
+              {s}
+            </Chip>
+          ))}
+        </View>
 
         <Text variant="titleMedium" style={[styles.sectionTitle, { color: theme.colors.onBackground, marginTop: 16 }]}>
           Payment Status
         </Text>
-        <SegmentedButtons
-          value={paymentStatus}
-          onValueChange={(v) => setPaymentStatus(v as PaymentStatus)}
-          buttons={[
-            { value: 'UNPAID', label: 'Unpaid' },
-            { value: 'PAID', label: 'Paid' },
-            { value: 'REFUNDED', label: 'Refunded' },
-          ]}
-          style={styles.segmented}
-        />
+        <View style={styles.chipRow}>
+          {(['UNPAID', 'PAID', 'REFUNDED'] as PaymentStatus[]).map((p) => (
+            <Chip
+              key={p}
+              selected={paymentStatus === p}
+              onPress={() => setPaymentStatus(p)}
+              style={{ marginRight: 8, marginBottom: 8 }}
+            >
+              {p}
+            </Chip>
+          ))}
+        </View>
 
         <Button
           mode="contained"
@@ -404,6 +408,7 @@ const styles = StyleSheet.create({
   scroll: { padding: 16, paddingBottom: 40 },
   sectionTitle: { marginBottom: 8 },
   segmented: { marginBottom: 12 },
+  chipRow: { flexDirection: 'row', flexWrap: 'wrap', marginBottom: 12 },
   input: { marginBottom: 8 },
   divider: { marginVertical: 16 },
   picker: {

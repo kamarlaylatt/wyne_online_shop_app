@@ -264,17 +264,18 @@ export default function OrderDetailScreen() {
           Order Status
         </Text>
         {editing ? (
-          <SegmentedButtons
-            value={status}
-            onValueChange={(v) => setStatus(v as OrderStatus)}
-            buttons={[
-              { value: 'PENDING', label: 'Pending' },
-              { value: 'PROCESSING', label: 'Processing' },
-              { value: 'COMPLETED', label: 'Completed' },
-              { value: 'CANCELLED', label: 'Cancelled' },
-            ]}
-            style={styles.segmented}
-          />
+          <View style={styles.chipRow}>
+            {(['PENDING', 'PROCESSING', 'COMPLETED', 'CANCELLED'] as OrderStatus[]).map((s) => (
+              <Chip
+                key={s}
+                selected={status === s}
+                onPress={() => setStatus(s)}
+                style={{ marginRight: 8, marginBottom: 8 }}
+              >
+                {s}
+              </Chip>
+            ))}
+          </View>
         ) : (
           <Chip mode={statusChipMode(order.status)} style={styles.chip}>{order.status}</Chip>
         )}
@@ -283,16 +284,18 @@ export default function OrderDetailScreen() {
           Payment Status
         </Text>
         {editing ? (
-          <SegmentedButtons
-            value={paymentStatus}
-            onValueChange={(v) => setPaymentStatus(v as PaymentStatus)}
-            buttons={[
-              { value: 'UNPAID', label: 'Unpaid' },
-              { value: 'PAID', label: 'Paid' },
-              { value: 'REFUNDED', label: 'Refunded' },
-            ]}
-            style={styles.segmented}
-          />
+          <View style={styles.chipRow}>
+            {(['UNPAID', 'PAID', 'REFUNDED'] as PaymentStatus[]).map((p) => (
+              <Chip
+                key={p}
+                selected={paymentStatus === p}
+                onPress={() => setPaymentStatus(p)}
+                style={{ marginRight: 8, marginBottom: 8 }}
+              >
+                {p}
+              </Chip>
+            ))}
+          </View>
         ) : (
           <Chip mode={paymentChipMode(order.paymentStatus)} style={styles.chip}>{order.paymentStatus}</Chip>
         )}
@@ -565,6 +568,7 @@ const styles = StyleSheet.create({
   spacer: { width: 8 },
   divider: { marginVertical: 16 },
   segmented: { marginBottom: 4 },
+  chipRow: { flexDirection: 'row', flexWrap: 'wrap', marginBottom: 4 },
   chip: { alignSelf: 'flex-start' },
   // Edit item rows
   itemCard: { borderRadius: 8, padding: 12, marginBottom: 12 },
