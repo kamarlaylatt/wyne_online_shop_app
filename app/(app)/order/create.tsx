@@ -193,53 +193,64 @@ export default function CreateOrderScreen() {
           const isLowStock = selectedItem && orderCount >= selectedItem.quantity;
 
           return (
-            <Surface key={row.id} style={[styles.itemCard, { backgroundColor: theme.colors.surfaceVariant }]} elevation={0}>
-              <View style={styles.itemHeader}>
-                <Text variant="labelMedium" style={{ color: theme.colors.onSurfaceVariant }}>Item {idx + 1}</Text>
-                {items.length > 1 && (
-                  <IconButton icon="close" size={18} onPress={() => removeItem(row.id)} />
-                )}
-              </View>
+            <Surface key={row.id} style={[styles.itemCard, { backgroundColor: theme.colors.surface, borderColor: theme.colors.outlineVariant }]} elevation={1}>
+              <View style={[styles.itemAccent, { backgroundColor: theme.colors.primary }]} />
+              <View style={styles.itemInner}>
+                <View style={styles.itemHeader}>
+                  <View style={[styles.itemBadge, { backgroundColor: theme.colors.primaryContainer }]}>
+                    <Text variant="labelSmall" style={{ color: theme.colors.onPrimaryContainer, fontWeight: '700' }}>
+                      #{idx + 1}
+                    </Text>
+                  </View>
+                  {items.length > 1 && (
+                    <IconButton icon="close" size={18} onPress={() => removeItem(row.id)} iconColor={theme.colors.onSurfaceVariant} />
+                  )}
+                </View>
 
-              {isLowStock && (
-                <View style={[styles.warningBox, { backgroundColor: theme.colors.errorContainer }]}>
-                  <Text variant="labelSmall" style={{ color: theme.colors.onErrorContainer }}>
-                    ⚠️ Stock critically low - {orderCount} orders vs {selectedItem.quantity} units
+                {isLowStock && (
+                  <View style={[styles.warningBox, { backgroundColor: theme.colors.errorContainer }]}>
+                    <Text variant="labelSmall" style={{ color: theme.colors.onErrorContainer }}>
+                      ⚠️ Stock critically low — {orderCount} ordered vs {selectedItem.quantity} units
+                    </Text>
+                  </View>
+                )}
+
+                <TouchableRipple
+                  onPress={() => setItemPickerIndex(idx)}
+                  style={[styles.picker, { borderColor: theme.colors.outline }]}
+                >
+                  <Text style={{ color: row.purchaseItemName ? theme.colors.onSurface : theme.colors.onSurfaceVariant }}>
+                    {row.purchaseItemName || 'Select purchase item…'}
+                  </Text>
+                </TouchableRipple>
+
+                <View style={styles.row}>
+                  <TextInput
+                    label="Qty"
+                    value={row.quantity}
+                    onChangeText={(v) => updateItem(row.id, { quantity: v })}
+                    mode="outlined"
+                    keyboardType="numeric"
+                    style={[styles.input, styles.flex1]}
+                  />
+                  <View style={styles.spacer} />
+                  <TextInput
+                    label="Unit Price"
+                    value={row.unitPrice}
+                    onChangeText={(v) => updateItem(row.id, { unitPrice: v })}
+                    mode="outlined"
+                    keyboardType="numeric"
+                    style={[styles.input, styles.flex2]}
+                  />
+                </View>
+
+                <View style={[styles.subtotalRow, { backgroundColor: theme.colors.secondaryContainer }]}>
+                  <Text variant="labelSmall" style={{ color: theme.colors.onSecondaryContainer }}>Subtotal</Text>
+                  <Text variant="labelLarge" style={{ color: theme.colors.onSecondaryContainer, fontWeight: '700' }}>
+                    {formatIDR(subtotal)}
                   </Text>
                 </View>
-              )}
-
-              <TouchableRipple
-                onPress={() => setItemPickerIndex(idx)}
-                style={[styles.picker, { borderColor: theme.colors.outline }]}
-              >
-                <Text style={{ color: row.purchaseItemName ? theme.colors.onSurface : theme.colors.onSurfaceVariant }}>
-                  {row.purchaseItemName || 'Select purchase item…'}
-                </Text>
-              </TouchableRipple>
-
-              <View style={styles.row}>
-                <TextInput
-                  label="Qty"
-                  value={row.quantity}
-                  onChangeText={(v) => updateItem(row.id, { quantity: v })}
-                  mode="outlined"
-                  keyboardType="numeric"
-                  style={[styles.input, styles.flex1]}
-                />
-                <View style={styles.spacer} />
-                <TextInput
-                  label="Unit Price"
-                  value={row.unitPrice}
-                  onChangeText={(v) => updateItem(row.id, { unitPrice: v })}
-                  mode="outlined"
-                  keyboardType="numeric"
-                  style={[styles.input, styles.flex2]}
-                />
               </View>
-              <Text variant="bodySmall" style={{ color: theme.colors.onSurfaceVariant, marginTop: 2 }}>
-                Subtotal: {formatIDR(subtotal)}
-              </Text>
             </Surface>
           );
         })}
@@ -418,15 +429,38 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   itemCard: {
-    borderRadius: 8,
-    padding: 12,
+    borderRadius: 12,
     marginBottom: 12,
+    borderWidth: 1,
+    overflow: 'hidden',
+    flexDirection: 'row',
+  },
+  itemAccent: {
+    width: 4,
+  },
+  itemInner: {
+    flex: 1,
+    padding: 12,
   },
   itemHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 4,
+    marginBottom: 8,
+  },
+  itemBadge: {
+    paddingHorizontal: 10,
+    paddingVertical: 3,
+    borderRadius: 20,
+  },
+  subtotalRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    borderRadius: 6,
+    marginTop: 4,
   },
   warningBox: {
     borderRadius: 4,
