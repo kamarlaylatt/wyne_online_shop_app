@@ -1,5 +1,5 @@
-import React from 'react';
-import { ScrollView, StyleSheet, View } from 'react-native';
+import React, { useState } from 'react';
+import { RefreshControl, ScrollView, StyleSheet, View } from 'react-native';
 import { ActivityIndicator, Button, Card, Text, useTheme } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
@@ -10,11 +10,18 @@ import { useCustomers } from '@/hooks/useCustomers';
 export default function DashboardScreen() {
   const theme = useTheme();
   const router = useRouter();
-  const { data: ordersData, isPending: ordersLoading } = useOrders();
-  const { data: purchaseItemsData, isPending: itemsLoading } = usePurchaseItems();
-  const { data: customers, isPending: customersLoading } = useCustomers();
+  const { data: ordersData, isPending: ordersLoading, refetch: refetchOrders } = useOrders();
+  const { data: purchaseItemsData, isPending: itemsLoading, refetch: refetchItems } = usePurchaseItems();
+  const { data: customers, isPending: customersLoading, refetch: refetchCustomers } = useCustomers();
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
   const isLoading = ordersLoading || itemsLoading || customersLoading;
+
+  const onRefresh = async () => {
+    setIsRefreshing(true);
+    await Promise.all([refetchOrders(), refetchItems(), refetchCustomers()]);
+    setIsRefreshing(false);
+  };
 
   const orders = ordersData?.pages.flatMap((p) => p.data) ?? [];
   const purchaseItems = purchaseItemsData?.pages.flatMap((p) => p.data) ?? [];
@@ -33,7 +40,11 @@ export default function DashboardScreen() {
 
   return (
     <SafeAreaView style={[styles.root, { backgroundColor: theme.colors.background }]}>
-      <ScrollView contentContainerStyle={styles.content} style={styles.scrollView}>
+      <ScrollView
+        contentContainerStyle={styles.content}
+        style={styles.scrollView}
+        refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} tintColor={theme.colors.primary} />}
+      >
         <Text variant="headlineSmall" style={[styles.heading, { color: theme.colors.onBackground }]}>
           Dashboard
         </Text>

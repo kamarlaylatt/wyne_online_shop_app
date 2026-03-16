@@ -1,5 +1,5 @@
-import React from 'react';
-import { FlatList, StyleSheet, View } from 'react-native';
+import React, { useState } from 'react';
+import { FlatList, RefreshControl, StyleSheet, View } from 'react-native';
 import { ActivityIndicator, FAB, List, Text, useTheme } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
@@ -11,8 +11,15 @@ const formatDate = (str: string) => new Date(str).toLocaleDateString('id-ID');
 export default function InventoryScreen() {
   const theme = useTheme();
   const router = useRouter();
-  const { data, isPending, isError, fetchNextPage, hasNextPage, isFetchingNextPage } = usePurchaseItems();
+  const { data, isPending, isError, fetchNextPage, hasNextPage, isFetchingNextPage, refetch } = usePurchaseItems();
+  const [isRefreshing, setIsRefreshing] = useState(false);
   const items = data?.pages.flatMap((p) => p.data) ?? [];
+
+  const onRefresh = async () => {
+    setIsRefreshing(true);
+    await refetch();
+    setIsRefreshing(false);
+  };
 
   if (isPending) {
     return (
@@ -60,6 +67,7 @@ export default function InventoryScreen() {
         onEndReached={() => { if (hasNextPage) fetchNextPage(); }}
         onEndReachedThreshold={0.3}
         ListFooterComponent={isFetchingNextPage ? <ActivityIndicator style={styles.footer} color={theme.colors.primary} /> : null}
+        refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} tintColor={theme.colors.primary} />}
       />
       <FAB icon="plus" style={styles.fab} onPress={() => router.push('/(app)/purchase-item/create')} />
     </SafeAreaView>

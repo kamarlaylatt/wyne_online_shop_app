@@ -1,5 +1,5 @@
-import React from 'react';
-import { FlatList, StyleSheet, View } from 'react-native';
+import React, { useState } from 'react';
+import { FlatList, RefreshControl, StyleSheet, View } from 'react-native';
 import { ActivityIndicator, Chip, FAB, List, Text, useTheme } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
@@ -19,8 +19,15 @@ const statusMode = (status: OrderStatus): 'outlined' | 'flat' => {
 export default function OrdersScreen() {
   const theme = useTheme();
   const router = useRouter();
-  const { data, isPending, isError, fetchNextPage, hasNextPage, isFetchingNextPage } = useOrders();
+  const { data, isPending, isError, fetchNextPage, hasNextPage, isFetchingNextPage, refetch } = useOrders();
+  const [isRefreshing, setIsRefreshing] = useState(false);
   const orders = data?.pages.flatMap((p) => p.data) ?? [];
+
+  const onRefresh = async () => {
+    setIsRefreshing(true);
+    await refetch();
+    setIsRefreshing(false);
+  };
 
   if (isPending) {
     return (
@@ -78,6 +85,7 @@ export default function OrdersScreen() {
         onEndReached={() => { if (hasNextPage) fetchNextPage(); }}
         onEndReachedThreshold={0.3}
         ListFooterComponent={isFetchingNextPage ? <ActivityIndicator style={styles.footer} color={theme.colors.primary} /> : null}
+        refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} tintColor={theme.colors.primary} />}
       />
       <FAB icon="plus" style={styles.fab} onPress={() => router.push('/(app)/order/create')} />
     </SafeAreaView>
