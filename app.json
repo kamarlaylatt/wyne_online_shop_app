@@ -4,7 +4,7 @@
     "slug": "wyne_online_shop_app",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/wyne-shop-icon.jpg",
+    "icon": "./assets/images/wyne-shop-icon.png",
     "scheme": "wyneonlineshopapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
