@@ -55,7 +55,7 @@
       "reactCompiler": true
     },
     "extra": {
-      "apiBaseUrl": "http://157.245.197.26",
+      "apiBaseUrl": "https://wyne-online-shop-management.vercel.app",
       "router": {},
       "eas": {
         "projectId": "9bc0728e-0123-4b25-ad5c-fbfa99b1b8e6"
