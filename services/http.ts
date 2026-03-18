@@ -2,7 +2,7 @@ import axios from 'axios';
 import Constants from 'expo-constants';
 import { authClient } from './authClient';
 
-const baseUrl = process.env.EXPO_PUBLIC_API_BASE_URL ?? Constants.expoConfig?.extra?.apiBaseUrl ?? 'http://157.245.197.26';
+const baseUrl = Constants.expoConfig?.extra?.apiBaseUrl ?? 'https://wyne-online-shop-management.vercel.app';
 
 const http = axios.create({
   baseURL: baseUrl + '/api/admin',

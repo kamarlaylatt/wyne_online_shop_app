@@ -3,7 +3,7 @@ import { expoClient } from '@better-auth/expo/client';
 import * as SecureStore from 'expo-secure-store';
 import Constants from 'expo-constants';
 
-const baseUrl = Constants.expoConfig?.extra?.apiBaseUrl ?? 'http://localhost:3000';
+const baseUrl = Constants.expoConfig?.extra?.apiBaseUrl ?? 'https://wyne-online-shop-management.vercel.app';
 
 export const authClient = createAuthClient({
   baseURL: baseUrl,
